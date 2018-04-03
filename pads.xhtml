@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
+ 
+<ui:composition template="/WEB-INF/plantillas/plantillaMaterial.xhtml">
+	<ui:define name="title">
+		<h:outputText value="Mantenimiento de Trabajadores" />
+	</ui:define>
+	<ui:define name="content">
+		
+		<h:form id="form"> 
+			<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="botonFlotante" onclick="document.getElementById('form:btnNuevo').click();">
+			  <i class="material-icons">add</i>
+			</button>
+			
+			<div class="ui-g">
+				    <div class="ui-g-12 ui-lg-6">
+				    	<p class="titulo1">Mantenimiento de PAD's</p>
+				    </div>
+				    <div class="ui-g-12 ui-lg-6">
+				    	<center>		
+							<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+						</center>
+				    </div>
+			</div>
+			
+			<!-- <p:layout style="min-width:400px;min-height:35px; height:63px; margin-bottom:10px;">
+			    <p:layoutUnit position="center">-->
+			    	<div class="ui-g">
+						    <div class="ui-g-12 ui-lg-2">
+						    	<p:selectOneMenu  value="#{padBean.tipoBus}" style="width:125px">
+					            <f:selectItem itemLabel="AÑO" itemValue="ANIO" />
+					            <f:selectItem itemLabel="NUM.EXPE" itemValue="NUM.EXPE" />
+					            <f:selectItem itemLabel="TEXTO" itemValue="TEXTO" />
+					          </p:selectOneMenu>
+						    </div>
+						     <div class="ui-g-12 ui-lg-1">
+						    	<p:inputText value="#{padBean.valBus}" />
+					          
+						    </div>
+						    <div class="ui-g-12 ui-lg-3">
+						    	<p:commandButton action="#{padBean.buscar()}" value="Buscar" update=":form" icon="ui-icon-document" title="Buscar"  />
+					          
+						    </div>
+						    <div class="ui-g-12 ui-lg-6">
+						    	<p:commandButton action="#{padBean.selectedEditar}" value="Editar PAD" update=":form" icon="ui-icon-pencil" title="Editar Registro" style="margin-left:10px; height:35px;" />
+							    <p:commandButton action="#{padBean.selectedEliminar}" value="Eliminar PAD" update=":form" icon="ui-icon-close" title="Nuevo Registro" style="margin-left:10px; height:35px;" />
+							    <p:commandButton action="#{padBean.selectedNuevo}" value="Nuevo PAD" id="btnNuevo" icon="ui-icon-document" title="Nuevo Registro" style="margin-left:10px; height:35px; display:none;" />
+						    </div>
+					</div>
+			    <!-- </p:layoutUnit>
+			</p:layout>-->
+	
+			 <p:dataTable var="row" value="#{padBean.listaPad}" rowIndexVar="rowIndex" paginator="true" rows="20" selectionMode="single" selection="#{padBean.selectedPad}" rowKey="#{row.codpad}" style="margin-top:10px;">
+			    <p:column headerText="N°" width="30" style="text-align:center">
+			        <h:outputText value="#{rowIndex+1}" />
+			    </p:column>
+			    
+			    <p:column headerText="EXPEDEINTE" width="100">
+			        <h:outputText value="#{row.numexpe}" />
+			    </p:column>
+			    
+			    <p:column headerText="F.RECEPCION" width="120">
+			        <h:outputText value="#{funcionesFechasBean.getFormatDate(row.fecrecepcion)}" />
+			    </p:column>
+			    
+			    <p:column headerText="F.PRESCRIPC" width="100">
+			        <h:outputText value="#{funcionesFechasBean.getFormatDate(row.fprescripcion)}" /><br />
+			        <h:outputText value="Restan #{row.diasprescripcion} días" style="color:red" />
+			    </p:column>
+			    
+			    <p:column headerText="SERVIDORES - F.PRESCRIPCION SANCION" width="300">
+			        <p:dataList value="#{row.listaPadServidor}" var="serv" type="ordered" itemType="none">
+			        	<div class="ui-g">
+						    <div class="ui-g-12 ui-lg-5">
+						    	<p:outputLabel value="#{serv.apepat} #{serv.apemat}" style="font-size:10px;" />
+						    </div>
+						    <div class="ui-g-12 ui-lg-4">
+						    	<p:outputLabel value="#{funcionesFechasBean.getFormatDate(serv.fprescripcion)}" style="font-size:10px;" />
+						    </div>
+						    <div class="ui-g-12 ui-lg-3">
+						    	<p:outputLabel value="(#{serv.diasprescripcion} días)" style="font-size:10px; color:red;" />
+						    </div>
+						</div>
+			        	
+			        	
+				     </p:dataList>
+			    </p:column>
+			 		 
+			    <p:column headerText="MATERIA">
+			        <h:outputText value="#{row.materia}"  />
+			    </p:column>
+			    
+			    <p:column headerText="INFORME PRECALIFICADOR" width="150">
+			        <h:outputText value="#{row.infprecalif}"  />
+			    </p:column>
+			    
+			    <p:column headerText="F.INFORME" width="70">
+			        <h:outputText value="#{funcionesFechasBean.getFormatDate(row.finfprecalif)}" />
+			    </p:column>
+			    
+			    <p:column headerText="ESTADO" width="100">
+			        <h:outputText value="#{row.desestadopad}" />
+			    </p:column>
+			 
+			    <p:column headerText="USU.REG" width="70" style="text-align:center">
+			        <h:outputText value="#{row.usureg}" />
+			    </p:column>
+			    
+			    <p:column headerText="FECHA.REG" width="90" style="text-align:center">
+			        <h:outputText value="#{funcionesFechasBean.getFormatDate(row.fechreg)}" />
+			    </p:column>
+			    <p:column headerText="">
+			    </p:column>
+			</p:dataTable>
+			
+	 		
+		</h:form>	
+	</ui:define>
+ 
+</ui:composition>
+</html>
