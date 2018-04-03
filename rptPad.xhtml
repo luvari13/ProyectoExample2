@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
+ 
+<ui:composition template="/WEB-INF/plantillas/plantillaMaterial.xhtml">
+	<ui:define name="title">
+		<h:outputText value="Reporte PAD" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form"> 
+		
+		<div class="ui-g">
+				    <div class="ui-g-12 ui-lg-6">
+				    	<p class="titulo1">Reporte PAD</p>
+				    </div>
+				    <div class="ui-g-12 ui-lg-6">
+				    	<center>		
+							<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+						</center>
+				    </div>
+		</div>
+		
+		
+		
+		 <p:fieldset legend="Reporte PAD" style="margin-bottom:20px">
+	    
+			
+	        <div class="ui-g">
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:outputLabel>Anio Recepción: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-10">
+			    	<p:selectOneMenu  value="#{rptPadBean.anioRecep}" style="width:125px">
+					    <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+					    <f:selectItem itemLabel="2017" itemValue="2017" />
+					    <f:selectItem itemLabel="2018" itemValue="2018" />
+				    </p:selectOneMenu>
+			    </div>
+			</div>
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:outputLabel>Estado:</p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-10">
+			    	<p:selectOneMenu value="#{rptPadBean.orgIns}" style="font-size:10px; !important">
+				         <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+				         <f:selectItems value="#{comunBean.listaEstadoPad}"  var="row" itemLabel="#{row.descripcion}" itemValue="#{row.codigo}"  />
+				     </p:selectOneMenu>	
+				</div>
+			</div>
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:outputLabel>Organo Instructor: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-10">
+			    	<p:selectOneMenu value="#{rptPadBean.orgIns}" style="font-size:10px; !important">
+			            <f:selectItem itemLabel="--TODOS--" itemValue="#{null}" />
+			            <f:selectItems value="#{comunBean.listaDependencia}"  var="row" itemLabel="#{row.descripcion}" itemValue="#{row.codigo}"  />
+			        </p:selectOneMenu>
+			    </div>
+			</div>
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:outputLabel>Organo Sancionador: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-10">
+			    	<p:selectOneMenu value="#{rptPadBean.orgSan}" style="font-size:10px; !important">
+			            <f:selectItem itemLabel="--SELECCIONAR--" itemValue="#{null}" />
+			            <f:selectItems value="#{comunBean.listaDependencia}"  var="row" itemLabel="#{row.descripcion}" itemValue="#{row.codigo}"  />
+			        </p:selectOneMenu>
+			    </div>
+			</div>
+			
+			
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-2">
+			    	
+			    </div>
+			    <div class="ui-g-12 ui-lg-10">		    	
+			    	<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" value="Exportar" icon="ui-icon-disk" title="Exportar" rendered="true" update="msgMensajesConsolidadoGlobal">
+				      <p:fileDownload value="#{rptPadBean.verReporteExcel(System.currentTimeMillis())}" />
+				  	</p:commandButton>
+			    </div>
+			</div>
+	        
+	    </p:fieldset>				
+	 		
+		</h:form>
+		
+	
+	</ui:define>
+ 
+</ui:composition>
+</html>
