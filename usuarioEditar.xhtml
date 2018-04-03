@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
+ 
+<ui:composition template="/WEB-INF/plantillas/plantillaMaterial.xhtml">
+	<ui:define name="title">
+		<h:outputText value="Mantenimiento de Usuarios" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form">
+		
+			<div class="ui-g">
+				    <div class="ui-g-12 ui-lg-6">
+				    	<p class="titulo1">Mantenimiento de Usuarios</p>
+				    </div>
+				    <div class="ui-g-12 ui-lg-6">
+				    	<center>		
+							<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+						</center>
+				    </div>
+			</div>
+			
+		 
+		
+		 <p:fieldset legend="Editar Usuario" style="margin-bottom:20px">
+	        
+	        <div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Trabajador: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-11">			    	
+			    	<p:outputLabel>#{usuarioBean.usuarioEditar.apepat} #{usuarioBean.usuarioEditar.apemat} #{usuarioBean.usuarioEditar.nombres}</p:outputLabel>
+			    </div>
+			</div>
+			
+	        <div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>DNI: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-11">			    	
+			    	<p:inputText value="#{usuarioBean.usuarioEditar.codpersonal}" disabled="true" />
+			    </div>
+			</div>
+			
+	        <div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Usuario: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:inputText value="#{usuarioBean.usuarioEditar.codusuario}" disabled="true" />
+			    </div>
+			</div>
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>¿Cambiar Clave?: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-11">
+			    	 <p:selectBooleanCheckbox value="#{usuarioBean.flgCambiarClave}" >
+			    	 	<p:ajax process="@form" update=":form" listener="#{usuarioBean.selectedcheckCambiarClave}" />
+			    	 </p:selectBooleanCheckbox>
+			    </div>
+			</div>
+			<p:panelGrid id="cambiarClave" rendered="#{usuarioBean.flgCambiarClave}">	
+				<div id="nuevaClave" class="ui-g" >
+				    <div class="ui-g-12 ui-lg-1">
+				    	<p:outputLabel >Nueva Clave: </p:outputLabel>
+				    </div>
+				    <div class="ui-g-12 ui-lg-11">
+				    	<p:password value="#{usuarioBean.usuarioEditar.password}" />
+				    </div>
+				</div>
+							
+				<div class="ui-g">
+				    <div class="ui-g-12 ui-lg-1">
+				    	<p:outputLabel>Repite Clave: </p:outputLabel>
+				    </div>
+				    <div class="ui-g-12 ui-lg-11">
+				    	<p:password value="#{usuarioBean.usuarioEditar.password2}" />
+				    </div>
+				</div>
+			</p:panelGrid>
+						
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Estado: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-11">
+			    	<p:selectOneMenu value="#{usuarioBean.usuarioEditar.estado}" style="font-size:10px; !important">
+			            <f:selectItem itemLabel="--SELECCIONAR--" itemValue="#{null}" />
+			            <f:selectItem itemLabel="ACTIVO" itemValue="A" />
+			            <f:selectItem itemLabel="DE BAJA" itemValue="X" />
+			        </p:selectOneMenu>
+			    </div>
+			</div>
+			
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Perfil: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:selectOneMenu value="#{usuarioBean.usuarioEditar.codperfil}" style="font-size:10px; !important">
+			            <f:selectItem itemLabel="--SELECCIONAR--" itemValue="#{null}" />
+			            <f:selectItems value="#{usuarioBean.listaPerfiles}"  var="row" itemLabel="#{row.perfil}" itemValue="#{row.codperfil}"  />
+			            <p:ajax event="change" listener="#{usuarioBean.armarArbolMenu()}" update=":form" process="@form"/>     
+			        </p:selectOneMenu>
+			    </div>
+			</div>
+			
+	    
+	    	<!--<p:tree value="#{usuarioBean.root}" var="node">
+				<p:treeNode>
+				<h:outputText value="#{node}"/>
+				</p:treeNode>
+			</p:tree>-->
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Permisos: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-11">
+			    	 <p:treeTable value="#{usuarioBean.root}" var="nodoTree" style="width:900px;">
+				        <p:column headerText="OPCION" style="width:300px;">
+				            <h:outputText value="#{nodoTree.name}" />
+				        </p:column>
+				        
+				        <p:column headerText="Ver Todo" style="text-align: center" width="50">
+				            <p:selectBooleanCheckbox value="#{usuarioBean.listaVerTodo[nodoTree.id]}" rendered="#{nodoTree.tipo==3}" />
+				        </p:column>
+				        
+				        <p:column headerText="Agregar" style="text-align: center" width="50">
+				            <p:selectBooleanCheckbox value="#{usuarioBean.listaAgregar[nodoTree.id]}" rendered="#{nodoTree.tipo==3}" />
+				        </p:column>
+				        
+				        <p:column headerText="Modificar" style="text-align: center" width="50">
+				            <p:selectBooleanCheckbox value="#{usuarioBean.listaModificar[nodoTree.id]}" rendered="#{nodoTree.tipo==3}" />
+				        </p:column>
+				        
+				        <p:column headerText="Eliminar" style="text-align: center" width="50">
+				            <p:selectBooleanCheckbox value="#{usuarioBean.listaEliminar[nodoTree.id]}" rendered="#{nodoTree.tipo==3}" />
+				        </p:column>
+				        
+				        <p:column headerText="Evaluar" style="text-align: center" width="50">
+				            <p:selectBooleanCheckbox value="#{usuarioBean.listaEvaluar[nodoTree.id]}" rendered="#{nodoTree.tipo==3}" />
+				        </p:column>
+				        <!-- <p:column style="width:24px">
+				            <p:commandLink update=":form:documentPanel" oncomplete="PF('documentDialog').show()" title="View Detail" styleClass="ui-icon ui-icon-search">
+				                <f:setPropertyActionListener value="#{document}" target="#{ttBasicView.selectedDocument}" />
+				            </p:commandLink>
+				        </p:column>-->
+				    </p:treeTable>
+			    </div>
+			</div>
+			
+    <br />
+    
+    
+    <div class="ui-g">
+		<div class="ui-g-12 ui-lg-1">
+			    	
+		</div>
+	    <div class="ui-g-12 ui-lg-1">
+		  	<p:commandButton  value="Guardar" action="#{usuarioBean.editar}" icon="ui-icon-disk" update=":form" />
+		</div>
+		<div class="ui-g-12 ui-lg-10">
+		  	<p:commandButton  value="Atrás" action="#{usuarioBean.atras}" ajax="false"   icon="ui-icon-disk" />
+		</div>
+	</div>
+
+
+
+
+    <p:dialog id="dialog" header="Document Detail" showEffect="fade" widgetVar="documentDialog" modal="true" resizable="false">
+        <p:outputPanel id="documentPanel">
+            <p:panelGrid  columns="2" columnClasses="label,value" rendered="#{not empty ttBasicView.selectedDocument}">
+               <h:outputLabel for="name" value="Name: " />
+                <h:outputText id="name" value="#{ttBasicView.selectedDocument.name}" style="font-weight:bold" />
+                <h:outputLabel for="size" value="Size: " />
+                <h:outputText id="size" value="#{ttBasicView.selectedDocument.size}" style="font-weight:bold" />
+                <h:outputLabel for="type" value="Type " />
+                <h:outputText id="type" value="#{ttBasicView.selectedDocument.type}" style="font-weight:bold" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+
+				    	
+	    </p:fieldset>			
+	 		
+		</h:form>
+		
+		
+		
+		
+	</ui:define>
+ 
+</ui:composition>
+</html>

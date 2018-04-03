@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
+ 
+<ui:composition template="/WEB-INF/plantillas/plantillaMaterial.xhtml">
+	<ui:define name="title">
+		<h:outputText value="Mantenimiento de Usuarios" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form"> 
+		
+		<div class="ui-g">
+				    <div class="ui-g-12 ui-lg-6">
+				    	<p class="titulo1">Mantenimiento de Usuarios</p>
+				    </div>
+				    <div class="ui-g-12 ui-lg-6">
+				    	<center>		
+							<p:messages id="msgMensajesConsolidadoGlobal" closable="true" escape="false" showDetail="false" />					
+						</center>
+				    </div>
+		</div>
+		
+		
+		
+		 <p:fieldset legend="Nuevo Usuario" style="margin-bottom:20px">
+	        
+	        <div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Trabajador: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-2">			    	
+			    	<p:commandButton  value="Buscar Trabajador" onclick="PF('DialogNuevoPersonal').show();"   icon="ui-icon-disk" />
+			    	
+			    </div>
+			    <div class="ui-g-12 ui-lg-9"><p:outputLabel>#{usuarioBean.usuarioNuevo.apepat} #{usuarioBean.usuarioNuevo.apemat} #{usuarioBean.usuarioNuevo.nombres}</p:outputLabel></div>
+			</div>
+			
+	        <div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Usuario: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:inputText value="#{usuarioBean.usuarioNuevo.codusuario}" />
+			    </div>
+			    <div class="ui-g-12 ui-lg-9"></div>
+			</div>
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Clave: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-2">
+			    	<p:password value="#{usuarioBean.usuarioNuevo.password}" />
+			    </div>
+			    <div class="ui-g-12 ui-lg-9"><p:inputText value="#{usuarioBean.usuarioNuevo.codpersonal}" style="visibility:hidden;" /></div>
+			</div>
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:outputLabel>Perfil: </p:outputLabel>
+			    </div>
+			    <div class="ui-g-12 ui-lg-11">
+			    	<p:selectOneMenu value="#{usuarioBean.usuarioNuevo.codperfil}" style="font-size:10px; !important">
+			            <f:selectItem itemLabel="--SELECCIONAR--" itemValue="#{null}" />
+			            <f:selectItems value="#{usuarioBean.listaPerfiles}"  var="row" itemLabel="#{row.perfil}" itemValue="#{row.codperfil}"  />
+			        </p:selectOneMenu>
+			    </div>
+			</div>
+			
+			
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-lg-1">
+			    	
+			    </div>
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:commandButton  value="Guardar" action="#{usuarioBean.guardar}" update=":form" icon="ui-icon-disk" />
+			    </div>
+			    <div class="ui-g-12 ui-lg-1">
+			    	<p:commandButton  value="Atrás" action="#{usuarioBean.atras}" ajax="false"   icon="ui-icon-disk" />
+			    </div>
+			    <div class="ui-g-12 ui-lg-9"></div>
+			</div>
+	        
+	    </p:fieldset>				
+	 		
+		</h:form>
+		
+		
+		<p:dialog header="Buscar Trabajador" widgetVar="DialogNuevoPersonal" modal="true" height="330" width="700">
+		    <h:form id="formNuevo">
+		    	 <p:fieldset legend="Buscar Trabajador">
+		    	 	<div class="ui-g">
+					    <div class="ui-g-12 ui-lg-4">
+					    	 <p:selectOneMenu id="console" value="#{usuarioBean.tipoBusTrab}" style="width:125px">
+					            <f:selectItem itemLabel="APELLIDOS" itemValue="APELLIDOS" />
+					            <f:selectItem itemLabel="DNI" itemValue="DNI" />
+					          </p:selectOneMenu>
+					    </div>
+					    <div class="ui-g-12 ui-lg-4">
+					    	<p:inputText value="#{usuarioBean.valBusTrab}" />
+					    </div>
+					    <div class="ui-g-12 ui-lg-4">
+					    	<p:commandButton  value="Buscar" action="#{usuarioBean.buscarPersonal}" icon="ui-icon-disk" update=":formNuevo" />
+					    </div>
+					</div>
+					<div style="width:100%; height: 200px; overflow: auto;">					
+						<p:dataTable var="row" value="#{usuarioBean.listaBusPersonales}" selectionMode="single" selection="#{usuarioBean.selectedPersonal}" rowKey="#{row.codpersonal}">
+							<p:ajax event="rowSelect" listener="#{usuarioBean.onRowSelectPersonal}" update=":form" />
+						
+						    <p:column headerText="Apellidos y Nombres" style="white-space: normal !important; width:250px;">
+						        <h:outputText value="#{row.apepat} #{row.apemat} #{row.nombres}" />
+						    </p:column>
+						    
+						    <p:column headerText="DNI" width="70" style="text-align:center">
+						        <h:outputText value="#{row.codpersonal}" />
+						    </p:column>
+						    
+						    <p:column headerText="Estado" width="70" style="text-align:center">
+						        <h:outputText value="#{row.estado.equals('A') ? 'ACTIVO' : 'DE BAJA'}" />
+						    </p:column>
+						
+					</p:dataTable>
+					</div>
+					
+					
+		    	 </p:fieldset>
+		    </h:form>
+		</p:dialog> 
+		
+	</ui:define>
+ 
+</ui:composition>
+</html>
